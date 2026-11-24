@@ -1,31 +1,10 @@
-# Freya · Görüşme konsolu
+# Freya · Sesli kart teslimat asistanı
 
-Mac üzerinde çalışan Türkçe kart teslimat asistanı. Aynı ekrandan bir demo müşterisi seçilir, mikrofonla görüşme yapılır, her turun işlem izi açılır ve bankanın gerçek SQLite kayıtları incelenir. Giden arama yerel olarak simüle edilir.
+Freya FDE assignment’ının ana görevi, ilk teslimat denemesinde ulaşılamayan sekiz müşteriye Türkçe sesli görüşmeyle yeni bir kart teslimat randevusu ayarlamaktır. Asistan görüşme izni alır, doğum tarihini banka servisiyle doğrular ve müşterinin ilçesindeki uygun kurye aralıklarını sunar. Müşteri seçtiği aralığı ayrıca onaylayınca randevu SQLite’a yazılır.
 
-## Freya Piyasa · Nasdaq takibi
+Görüşme konsolu macOS’ta çalışır. Giden arama yerel olarak simüle edilir. Konsoldan mikrofonla görüşebilir, her turun işlem izini ve kurye kapasitesindeki değişimi inceleyebilirsin.
 
-Piyasa sitesi kendi adresinde ve veritabanında çalışır. Görüşme sesi için Piper, Türkçe Antalia modelini ilk seslendirmede yükler. Banka konsolu ve Ollama gerekmez.
-
-```sh
-./run-nasdaq.sh
-```
-
-[Freya Piyasa’yı aç](http://127.0.0.1:8767). Bir hisse seçerek fiyat grafiğini ve analist dağılımını incele. **Alarm kur** ile USD hedefini ve yönünü seç. **Alarmı tetikle** düğmesiyle akışı hemen dene. **Çağrıyı başlat** açıldığında **Evet, müsaitim** yanıtını ver. Asistan alarm raporunu okur, **Başka sorunuz var mı?** diye sorar ve **Hayır** yanıtıyla iyi günler dileyip görüşmeyi bitirir. Simüle görüşmenin tüm asistan cümleleri Türkçe Antalia sesiyle üretilir. Tarayıcı otomatik oynatmayı engellerse **Sesi yeniden çal** düğmesine bas. Mikrofonla yanıt tarayıcı desteğine bağlıdır. Yanıt düğmeleri her tarayıcıda kullanılabilir.
-
-| Ortam değişkeni | Kullanım |
-|---|---|
-| `MASSIVE_API_KEY` | Nasdaq kotasyonları, hacim sıralaması, fiyat geçmişi ve otomatik alarm için Massive erişim anahtarı. Hacim sıralaması için Full Market Snapshot erişimi gerekir. Anahtar yoksa site açıkça etiketlenen örnek veriyle ve elle tetiklemeyle açılır. |
-| `FMP_API_KEY` | FMP Grades Summary erişim anahtarı. Güçlü Al/Al ve Güçlü Sat/Sat aynı grupta toplanır. |
-| `NASDAQ_DATA_DELAY_MINUTES` | Veri planının gecikmesi. Varsayılan `15`. Anlık veriye yetkili plan için `0`. |
-| `NASDAQ_POLL_SECONDS` | Sunucunun hedef kontrol sıklığı. Varsayılan `60` saniye. |
-| `NASDAQ_DB` | Varsayılan `.runtime/nasdaq.sqlite`. Alarmlar aynı tarayıcı oturumuna bağlıdır ve sunucu yeniden başlasa da saklanır. |
-| `NASDAQ_PORT`, `NASDAQ_BIND` | Varsayılan `8767` ve `127.0.0.1`. Harici dağıtımda HTTPS proxy kullanarak `NASDAQ_PUBLIC_HOST` değerini port belirtmeden alan adıyla ayarla. |
-
-Liste Nasdaq ana kotasyonlu adi hisseleri ve depo sertifikalarını seans pay hacmine göre sıralar. Geçerli seans hacmi henüz oluşmamışsa son işlem seansı gösterilir. 1 günlük değişim önceki seans kapanışına, 1 hafta/ay/yıl değişimi ilgili takvim tarihindeki veya en yakın önceki işlem günündeki kapanışa göredir. Masaüstünde fareyle, klavyede sağ ve sol oklarla grafikte fiyat noktalarını inceleyebilirsin.
-
-Canlı veri modunda site sunucusu açıkken, tarayıcı sekmesi kapalı olsa bile, alarm oluşturulduktan sonraki tamamlanmış dakika barlarını yönüne göre kontrol eder. Alarm tek sefer tetiklenir. Elle tetiklenen alarm görüşmede deneme olarak belirtilir. [Massive fiyat verisi](https://massive.com/docs/rest/stocks/snapshots/full-market-snapshot), [FMP analist verisi](https://site.financialmodelingprep.com/developer/docs/stable/grades-summary).
-
-## Bu Mac’te çalıştırma
+## Kart teslimat asistanını çalıştırma
 
 Proje klasöründe:
 
@@ -100,3 +79,28 @@ PYTHONPATH=. .venv/bin/python -u tests/smoke_voice.py
 ### Demo sınırları
 
 Sistem tek bilgisayarda, tek demo haftasıyla çalışır. Kimlik turu vaka verisine dayalıdır. Gerçek bir banka için güvenilir dış arama doğrulaması, yetkilendirme, kayıt saklama politikası, telefon ve kurye bağlantısı, operasyon sorumluluğu ve gürültülü gerçek çağrılarla pilot gerekir. Kart sahibinin kapıda kimlik göstermesi zorunludur. Operasyon için ek kapasite talebi ertelenmiştir.
+
+## Ek özellik · Freya Piyasa (Nasdaq takibi)
+
+Assignment’ın açık sorusu için geliştirilen bu özellik, müşterinin seçtiği fiyat eşiği aşıldığında bir piyasa özeti sunan sesli görüşmeyi simüle eder.
+
+Piyasa sitesi kendi adresinde ve veritabanında çalışır. Görüşme sesi için Piper, Türkçe Antalia modelini ilk seslendirmede yükler. Banka konsolu ve Ollama gerekmez.
+
+```sh
+./run-nasdaq.sh
+```
+
+[Freya Piyasa’yı aç](http://127.0.0.1:8767). Bir hisse seçerek fiyat grafiğini ve analist dağılımını incele. **Alarm kur** ile USD hedefini ve yönünü seç. **Alarmı tetikle** düğmesiyle akışı hemen dene. **Çağrıyı başlat** açıldığında **Evet, müsaitim** yanıtını ver. Asistan alarm raporunu okur, **Başka sorunuz var mı?** diye sorar ve **Hayır** yanıtıyla iyi günler dileyip görüşmeyi bitirir. Simüle görüşmenin tüm asistan cümleleri Türkçe Antalia sesiyle üretilir. Tarayıcı otomatik oynatmayı engellerse **Sesi yeniden çal** düğmesine bas. Mikrofonla yanıt tarayıcı desteğine bağlıdır. Yanıt düğmeleri her tarayıcıda kullanılabilir.
+
+| Ortam değişkeni | Kullanım |
+|---|---|
+| `MASSIVE_API_KEY` | Nasdaq kotasyonları, hacim sıralaması, fiyat geçmişi ve otomatik alarm için Massive erişim anahtarı. Hacim sıralaması için Full Market Snapshot erişimi gerekir. Anahtar yoksa site açıkça etiketlenen örnek veriyle ve elle tetiklemeyle açılır. |
+| `FMP_API_KEY` | FMP Grades Summary erişim anahtarı. Güçlü Al/Al ve Güçlü Sat/Sat aynı grupta toplanır. |
+| `NASDAQ_DATA_DELAY_MINUTES` | Veri planının gecikmesi. Varsayılan `15`. Anlık veriye yetkili plan için `0`. |
+| `NASDAQ_POLL_SECONDS` | Sunucunun hedef kontrol sıklığı. Varsayılan `60` saniye. |
+| `NASDAQ_DB` | Varsayılan `.runtime/nasdaq.sqlite`. Alarmlar aynı tarayıcı oturumuna bağlıdır ve sunucu yeniden başlasa da saklanır. |
+| `NASDAQ_PORT`, `NASDAQ_BIND` | Varsayılan `8767` ve `127.0.0.1`. Harici dağıtımda HTTPS proxy kullanarak `NASDAQ_PUBLIC_HOST` değerini port belirtmeden alan adıyla ayarla. |
+
+Liste Nasdaq ana kotasyonlu adi hisseleri ve depo sertifikalarını seans pay hacmine göre sıralar. Geçerli seans hacmi henüz oluşmamışsa son işlem seansı gösterilir. 1 günlük değişim önceki seans kapanışına, 1 hafta/ay/yıl değişimi ilgili takvim tarihindeki veya en yakın önceki işlem günündeki kapanışa göredir. Masaüstünde fareyle, klavyede sağ ve sol oklarla grafikte fiyat noktalarını inceleyebilirsin.
+
+Canlı veri modunda site sunucusu açıkken, tarayıcı sekmesi kapalı olsa bile, alarm oluşturulduktan sonraki tamamlanmış dakika barlarını yönüne göre kontrol eder. Alarm tek sefer tetiklenir. Elle tetiklenen alarm görüşmede deneme olarak belirtilir. [Massive fiyat verisi](https://massive.com/docs/rest/stocks/snapshots/full-market-snapshot), [FMP analist verisi](https://site.financialmodelingprep.com/developer/docs/stable/grades-summary).
