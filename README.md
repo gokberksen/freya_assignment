@@ -82,7 +82,17 @@ Sistem tek bilgisayarda, tek demo haftasıyla çalışır. Kimlik turu vaka veri
 
 ## Ek özellik · Freya Piyasa (Nasdaq takibi)
 
-Assignment’ın açık sorusu için geliştirilen bu özellik, müşterinin seçtiği fiyat eşiği aşıldığında bir piyasa özeti sunan sesli görüşmeyi simüle eder.
+Assignment’ın açık sorusu için geliştirilen bu özellik, müşterinin seçtiği fiyat eşiğine ulaşıldığında bir piyasa özeti sunan sesli görüşmeyi simüle eder.
+
+### Neden bu özellik eklendi?
+
+FINRA Investor Education Foundation’ın 2024 ABD yatırımcı anketinde katılımcıların **%29’u** yatırım kararlarında sosyal medya gruplarından veya forumlardan yararlandığını bildirdi. Bu oran 18–34 yaş grubunda **%60** idi. Proje açısından bu bulgu, bankanın müşteriye takip ettiği bir hisse hakkında fiyatı, eşik olayını ve mevcut analist görüşlerinin dağılımını tek bir kısa özette sunması için bir gerekçe sağlıyor. [FINRA Foundation araştırma notu, 2026](https://finrafoundation.org/sites/finrafoundation/files/2026-03/FINRA_Foundation_Research_Brief_Social_Media_Finfluencers.pdf)
+
+Bank of England ve FCA’nın 2026 anketinde, ankete yanıt veren finansal kuruluşların **%86’sı** yapay zekâ kullandığını bildirdi. Küçük kuruluşlara yönelik kısa formu yanıtlayanların **%36’sı** müşteri hizmetlerini mevcut veya planlanan bir yapay zekâ kullanım alanı olarak gösterdi. Bu eğilim, kart teslimatında kullanılan sesli görüşme yaklaşımını müşteriye zamanında bilgi sunan ikinci bir banka senaryosunda denemeyi destekliyor. [Bank of England ve FCA, 2026](https://www.bankofengland.co.uk/report/2026/artificial-intelligence-in-uk-financial-services-2026)
+
+Freya Piyasa’da izlenecek hisseyi, fiyatı ve eşik yönünü müşteri seçer. Sunucu eşiği kontrol eder, görüşme de tetiklenme nedenini ve mevcut piyasa verilerini sesli olarak aktarır. Böylece müşteri fiyatı sürekli kontrol etmeden seçtiği hareketten haberdar olabilir. Anketler özellik için bağlam sağlıyor. Sesli alarmın kaç müşteri tarafından tercih edileceği ve ne kadar zaman kazandıracağı bu demoda ölçülmedi.
+
+### Freya Piyasa’yı çalıştırma
 
 Piyasa sitesi kendi adresinde ve veritabanında çalışır. Görüşme sesi için Piper, Türkçe Antalia modelini ilk seslendirmede yükler. Banka konsolu ve Ollama gerekmez.
 
