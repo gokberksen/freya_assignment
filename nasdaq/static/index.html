@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f6fb">
+  <meta name="description" content="Nasdaq'ın en çok işlem gören hisselerini ve fiyat alarmlarınızı takip edin.">
+  <title>Freya Piyasa | Nasdaq Hisse Takibi</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Freya Piyasa ana sayfa">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>freya<span class="brand-divider"></span><small>Piyasa</small></span>
+      </a>
+      <a class="nav-link" href="#alarmlar">Alarmlarım <span id="alert-count" hidden></span></a>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">ABD HİSSE PİYASASI</p>
+        <h1 id="page-title">Nasdaq’ta en çok işlem gören hisseler</h1>
+        <p>Hacme göre ilk 10 hisseyi inceleyin, hedef fiyatınız için alarm kurun.</p>
+      </div>
+      <div class="market-meta">
+        <span id="market-mode" class="tag">Bağlanıyor</span>
+        <time id="market-date"></time>
+      </div>
+    </section>
+
+    <p id="market-error" class="notice error" role="status" hidden></p>
+    <div class="dashboard">
+      <section class="panel leaders" aria-labelledby="leaders-title">
+        <div class="panel-heading">
+          <div><h2 id="leaders-title">Hacim liderleri</h2><p>İşlem gören hisse adedine göre</p></div>
+          <button type="button" id="refresh" class="button quiet">Yenile</button>
+        </div>
+        <div class="table-scroll" tabindex="0" aria-label="Hisse tablosu">
+          <table>
+            <thead><tr>
+              <th scope="col">Hisse</th><th scope="col">Fiyat</th><th scope="col">Hacim</th>
+              <th scope="col">1G</th><th scope="col">1H</th><th scope="col">1A</th><th scope="col">1Y</th>
+            </tr></thead>
+            <tbody id="leaders-body"><tr><td class="table-empty" colspan="7">Hisseler yükleniyor…</td></tr></tbody>
+          </table>
+        </div>
+        <p class="table-foot">Değişim önceki seans ve ilgili dönemin kapanış fiyatına göre hesaplanır.</p>
+      </section>
+
+      <section class="panel stock-panel" aria-labelledby="stock-title" id="hisse-detayi">
+        <div class="panel-heading stock-heading">
+          <div><h2 id="stock-title">Hisse detayı</h2><p id="stock-name">Grafiği görmek için bir hisse seçin.</p></div>
+          <button type="button" id="open-alarm" class="button primary" disabled>Alarm kur</button>
+        </div>
+        <div class="chart-header">
+          <div><strong id="stock-price">—</strong> <span id="stock-change" class="return">—</span></div>
+          <span class="currency">USD</span>
+        </div>
+        <div class="periods" role="group" aria-label="Grafik dönemi">
+          <button type="button" data-period="1D" aria-pressed="true">1 gün</button>
+          <button type="button" data-period="1W" aria-pressed="false">1 hafta</button>
+          <button type="button" data-period="1M" aria-pressed="false">1 ay</button>
+          <button type="button" data-period="1Y" aria-pressed="false">1 yıl</button>
+        </div>
+        <div class="chart-box">
+          <canvas id="price-chart" tabindex="0" role="img" aria-label="Fiyat grafiği. Noktaları incelemek için yön tuşlarını kullanın."></canvas>
+          <p id="chart-message">Fiyat geçmişi yükleniyor…</p>
+          <div class="chart-tooltip" id="chart-tooltip" hidden></div>
+        </div>
+        <div class="analysts">
+          <div class="analyst-heading"><h3>Analist görüşleri</h3><span id="ratings-source"></span></div>
+          <p id="ratings-message">Analist görüşleri yükleniyor…</p>
+          <div id="ratings-data" hidden>
+            <div class="rating-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+            <dl class="rating-counts">
+              <div><dt><i></i>Al</dt><dd id="rating-buy"></dd></div>
+              <div><dt><i></i>Tut</dt><dd id="rating-hold"></dd></div>
+              <div><dt><i></i>Sat</dt><dd id="rating-sell"></dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel alarms" id="alarmlar" aria-labelledby="alarms-title">
+      <div class="panel-heading">
+        <div><h2 id="alarms-title">Fiyat alarmlarım</h2><p>Tetiklenen alarmın görüşmesini buradan başlatabilirsiniz.</p></div>
+        <span class="alarm-indicator" aria-hidden="true">◌</span>
+      </div>
+      <p class="notice error" id="alarm-error" role="status" hidden></p>
+      <div id="alert-list" aria-live="polite"><p class="empty-alerts">Alarmlar yükleniyor…</p></div>
+    </section>
+    <footer><span>Freya Piyasa</span><span id="data-source"></span></footer>
+  </main>
+
+  <dialog id="alarm-dialog" aria-labelledby="alarm-dialog-title">
+    <form id="alarm-form">
+      <div class="dialog-head">
+        <div><h2 id="alarm-dialog-title">Fiyat alarmı kur</h2><p id="alarm-symbol"></p></div>
+        <button type="button" class="close" data-close aria-label="Kapat">×</button>
+      </div>
+      <label for="target">Hedef fiyat (USD)</label>
+      <input id="target" name="target" type="text" inputmode="decimal" maxlength="12" placeholder="Örn. 180,50" required>
+      <label for="direction">Tetikleme koşulu</label>
+      <select id="direction" name="direction">
+        <option value="above">Hedefe yükseldiğinde veya üstüne çıktığında</option>
+        <option value="below">Hedefe düştüğünde veya altına indiğinde</option>
+      </select>
+      <p class="hint">Kurulan alarmı istediğiniz zaman elle tetikleyebilirsiniz.</p>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" class="button quiet" data-close>Vazgeç</button><button type="submit" class="button primary">Alarmı kaydet</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="call-dialog" aria-labelledby="call-title">
+    <div class="dialog-head">
+      <div><h2 id="call-title">Piyasa asistanı</h2><p id="call-subtitle">Simüle görüşme</p></div>
+      <button type="button" class="close" data-close aria-label="Görüşmeyi kapat">×</button>
+    </div>
+    <ol id="call-messages" aria-label="Görüşme dökümü" aria-live="polite"></ol>
+    <audio id="call-audio" preload="none"></audio>
+    <p id="call-state" class="hint" role="status"></p>
+    <p id="call-audio-error" class="form-error" role="status" hidden></p>
+    <div id="call-actions" class="dialog-actions call-actions"></div>
+  </dialog>
+</body>
+</html>

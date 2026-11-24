@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#142e27" />
+    <title>Freya · Görüşme konsolu</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div class="headwrap">
+        <a class="brand" href="#main" aria-label="Freya ana ekran"
+          ><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span
+          >freya</a
+        ><span class="headrule"></span
+        ><span class="brandsection">Operasyon merkezi</span
+        ><span class="server" id="server"><i></i> Bağlanıyor</span>
+      </div>
+    </header>
+    <main id="main">
+      <div class="pagehead">
+        <div>
+          <p class="kicker">SES OPERASYONLARI</p>
+          <h1>Görüşme konsolu</h1>
+        </div>
+        <div class="pageactions">
+          <button id="history" class="quiet" disabled>Görüşme geçmişi</button>
+          <button id="reset" class="quiet">
+            <span data-icon="reset"></span> Veritabanını sıfırla
+          </button>
+        </div>
+      </div>
+      <div class="controls">
+        <label for="customer"
+          >Demo müşteri<select id="customer" aria-label="Demo müşteri"></select
+        ></label>
+        <button id="start" class="primary">
+          <span data-icon="phone"></span> Görüşmeyi başlat</button
+        ><button id="end" class="quiet" disabled>Görüşmeyi bitir</button>
+        <div class="session">
+          <span class="dot"></span><span id="phase">Görüşme bekleniyor</span
+          ><span class="turn" id="turn">Tur 0</span>
+        </div>
+      </div>
+      <p id="notice" role="status" hidden></p>
+      <section class="panels">
+        <article class="panel talk">
+          <div class="panelhead">
+            <div class="sectionicon" data-icon="wave"></div>
+            <h2>Görüşme</h2>
+            <span class="tag" id="identity">Ses kanalı</span>
+          </div>
+          <div class="scroll" id="messages"></div>
+          <div class="micwrap">
+            <button id="mic" disabled>
+              <span data-icon="mic"></span
+              ><span id="miclabel">Mikrofonu başlat</span>
+            </button>
+            <button id="skip-birth-date" type="button" hidden>
+              Doğum tarihini atla
+            </button>
+            <button
+              id="replay"
+              class="listen"
+              disabled
+              aria-label="Son yanıtı seslendir"
+              title="Son yanıtı seslendir"
+            >
+              <span data-icon="sound"></span>
+            </button>
+          </div>
+        </article>
+        <article class="panel trace">
+          <div class="panelhead">
+            <div class="sectionicon" data-icon="layers"></div>
+            <h2>İşlem akışı</h2>
+            <button
+              id="follow"
+              class="tag"
+              title="En yeni turun adımlarını izle"
+            >
+              Son tur
+            </button>
+          </div>
+          <div class="scroll" id="events"></div>
+        </article>
+      </section>
+      <section class="ledger">
+        <div class="bankhead">
+          <div>
+            <p class="kicker">VERİ TABANI</p>
+            <h2>Banka kayıtları</h2>
+          </div>
+          <div id="counts" class="counts"></div>
+        </div>
+        <nav id="tabs" aria-label="Banka tabloları">
+          <button data-tab="slots" class="selected">Kurye kapasitesi</button
+          ><button data-tab="customers">Müşteriler</button
+          ><button data-tab="bookings">Randevular</button>
+        </nav>
+        <div id="table" class="tablewrap"></div>
+      </section>
+    </main>
+    <dialog id="history-dialog" aria-labelledby="history-title">
+      <h2 id="history-title">Görüşme geçmişi</h2>
+      <p id="history-status" role="status"></p>
+      <ul id="history-list"></ul>
+      <div><button id="close-history" class="quiet">Kapat</button></div>
+    </dialog>
+    <dialog id="dialog">
+      <h2>Veritabanı sıfırlansın mı?</h2>
+      <p>
+        İşlem izleri ve randevular silinecek. Başlangıçtaki yedi yer geri yüklenecek.
+        Açık görüşmeler ve randevu teyidi alan görüşmeler açıklamayla baştan başlayacak.
+      </p>
+      <div>
+        <button id="cancel" class="quiet">Vazgeç</button
+        ><button id="confirmReset" class="danger">Sıfırla</button>
+      </div>
+    </dialog>
+  </body>
+</html>
